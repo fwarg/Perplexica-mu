@@ -33,7 +33,7 @@ export const PUBLIC_API_ROUTES = [
 
 export const PUBLIC_PAGES = ['/login', '/register'];
 
-export const SKIP_PATHS = ['/_next', '/favicon.ico', '/public'];
+export const SKIP_PATHS = ['/_next', '/favicon.ico', '/public', '/manifest'];
 
 /**
  * Check if we're in the Next.js build phase.

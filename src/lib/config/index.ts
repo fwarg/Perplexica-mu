@@ -117,6 +117,26 @@ class ConfigManager {
     ],
     system: [
       {
+        name: 'RLM Source Summarizer',
+        key: 'rlmEnabled',
+        type: 'switch',
+        required: false,
+        description:
+          'Use Recursive LM to compress search results before writing. Reduces context size but adds latency.',
+        default: false,
+        scope: 'server',
+      },
+      {
+        name: 'RLM Service URL',
+        key: 'rlmServiceURL',
+        type: 'string',
+        required: false,
+        description: 'URL of the RLM microservice (e.g. http://rlm-svc:8020)',
+        placeholder: 'http://rlm-svc:8020',
+        default: '',
+        scope: 'server',
+      },
+      {
         name: 'GPU Status Indicator',
         key: 'gpuIndicatorType',
         type: 'select',

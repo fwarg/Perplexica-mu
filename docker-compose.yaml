@@ -1,4 +1,17 @@
 services:
+  rlm-svc:
+    build:
+      context: ./services/rlm-svc
+    ports:
+      - '8020:8020'
+    environment:
+      - RLM_MODEL=${RLM_MODEL:-}
+      - OPENAI_BASE_URL=${OPENAI_BASE_URL:-}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-local}
+    restart: unless-stopped
+    profiles:
+      - rlm
+
   perplexica:
     image: perplexica-mu:slim
     build:

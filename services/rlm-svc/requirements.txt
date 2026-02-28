@@ -1,0 +1,4 @@
+fastapi
+uvicorn[standard]
+rlms
+python-dotenv

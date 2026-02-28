@@ -8,6 +8,8 @@ import db from '@/lib/db';
 import { chats, messages } from '@/lib/db/schema';
 import { and, eq, gt } from 'drizzle-orm';
 import { TextBlock } from '@/lib/types';
+import configManager from '@/lib/config';
+import { summarizeWithRLM } from '@/lib/rlmClient';
 
 class SearchAgent {
   async searchAsync(session: SessionManager, input: SearchAgentInput) {
@@ -98,13 +100,30 @@ class SearchAgent {
       type: 'researchComplete',
     });
 
-    const finalContext =
+    let finalContext =
       searchResults?.searchFindings
         .map(
           (f, index) =>
             `<result index=${index + 1} title=${f.metadata.title}>${f.content}</result>`,
         )
         .join('\n') || '';
+
+    const rlmEnabled = configManager.getConfig('system.rlmEnabled', false);
+    const rlmServiceURL = configManager.getConfig('system.rlmServiceURL', '');
+
+    if (rlmEnabled && rlmServiceURL && searchResults?.searchFindings.length) {
+      const condensed = await summarizeWithRLM(
+        searchResults.searchFindings.map((f) => ({
+          title: f.metadata.title,
+          content: f.content,
+        })),
+        input.followUp,
+        rlmServiceURL,
+      );
+      if (condensed) {
+        finalContext = `<rlm_synthesis>${condensed}</rlm_synthesis>`;
+      }
+    }
 
     const widgetContext = widgetOutputs
       .map((o) => {

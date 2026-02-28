@@ -19,6 +19,7 @@ class ConfigManager {
     search: {
       searxngURL: '',
     },
+    system: {},
   };
   uiConfigSections: UIConfigSections = {
     preferences: [
@@ -112,6 +113,23 @@ class ConfigManager {
         default: '',
         scope: 'server',
         env: 'SEARXNG_API_URL',
+      },
+    ],
+    system: [
+      {
+        name: 'GPU Status Indicator',
+        key: 'gpuIndicatorType',
+        type: 'select',
+        options: [
+          { name: 'Disabled', value: 'disabled' },
+          { name: 'AMD (sysfs)', value: 'amd' },
+          { name: 'NVIDIA (nvidia-smi)', value: 'nvidia' },
+        ],
+        required: false,
+        description:
+          'Show GPU usage indicator in the navbar. AMD uses sysfs, NVIDIA uses nvidia-smi. Requires appropriate Docker mounts.',
+        default: 'disabled',
+        scope: 'server',
       },
     ],
   };

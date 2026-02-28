@@ -4,6 +4,7 @@ import {
   BrainCog,
   ChevronLeft,
   ExternalLink,
+  Monitor,
   Search,
   Sliders,
   ToggleRight,
@@ -16,6 +17,7 @@ import Loader from '../ui/Loader';
 import { cn } from '@/lib/utils';
 import Models from './Sections/Models/Section';
 import SearchSection from './Sections/Search';
+import SystemSection from './Sections/System';
 import Select from '@/components/ui/Select';
 import Personalization from './Sections/Personalization';
 import { useAuth } from '@/lib/hooks/useAuth';
@@ -55,6 +57,15 @@ const sections = [
     icon: Search,
     component: SearchSection,
     dataAdd: 'search',
+    adminOnly: true,
+  },
+  {
+    key: 'system',
+    name: 'System',
+    description: 'System-wide settings.',
+    icon: Monitor,
+    component: SystemSection,
+    dataAdd: 'system',
     adminOnly: true,
   },
 ];

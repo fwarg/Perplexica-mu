@@ -3,6 +3,7 @@ import { Message } from './ChatWindow';
 import { useEffect, useState, Fragment } from 'react';
 import { formatTimeDifference } from '@/lib/utils';
 import DeleteChat from './DeleteChat';
+import GPUIndicator from './GPUIndicator';
 import {
   Popover,
   PopoverButton,
@@ -257,6 +258,7 @@ const Navbar = () => {
           </div>
 
           <div className="flex items-center gap-1 min-w-0">
+            <GPUIndicator />
             <Popover className="relative">
               <PopoverButton className="p-2 rounded-lg hover:bg-light-secondary dark:hover:bg-dark-secondary transition-colors duration-200">
                 <Share size={16} className="text-black/60 dark:text-white/60" />

@@ -206,7 +206,11 @@ class ConfigManager {
   }
 
   private migrateConfig(config: Config): Config {
-    /* TODO: Add migrations */
+    // Ensure top-level sections introduced after initial release always exist
+    if (!config.system) config.system = {};
+    if (!config.preferences) config.preferences = {};
+    if (!config.personalization) config.personalization = {};
+    if (!config.search) config.search = { searxngURL: '' };
     return config;
   }
 

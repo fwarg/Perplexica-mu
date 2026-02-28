@@ -2,7 +2,7 @@ import os
 from typing import List
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-import rlms
+from rlm import RLM
 
 app = FastAPI()
 
@@ -36,28 +36,27 @@ async def summarize(req: SummarizeRequest):
     if not RLM_MODEL:
         raise HTTPException(status_code=500, detail="RLM_MODEL env var not set")
 
-    findings_list = [
+    context_str = "\n\n".join(
         f"[{i + 1}] {f.title}\n{f.content}" for i, f in enumerate(req.findings)
-    ]
+    )
 
-    backend_kwargs: dict = {"model": RLM_MODEL}
+    backend_kwargs: dict = {"model_name": RLM_MODEL}
     if OPENAI_BASE_URL:
         backend_kwargs["base_url"] = OPENAI_BASE_URL
     if OPENAI_API_KEY:
         backend_kwargs["api_key"] = OPENAI_API_KEY
 
     try:
-        result = rlms.completion(
-            context=findings_list,
-            root_prompt=req.query,
-            system_prompt=SYSTEM_PROMPT,
+        rlm = RLM(
             backend="openai",
             backend_kwargs=backend_kwargs,
+            environment="local",
             max_depth=1,
             max_iterations=8,
-            environment="local",
+            custom_system_prompt=SYSTEM_PROMPT,
             compaction=False,
         )
+        result = rlm.completion(prompt=context_str, root_prompt=req.query)
         return SummarizeResponse(condensed=result.response)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

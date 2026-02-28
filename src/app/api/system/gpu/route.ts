@@ -7,7 +7,7 @@ const SYSFS_DRM_PATH = '/sys/class/drm';
 
 /**
  * Reads GPU utilization from Linux sysfs (AMD GPUs).
- * Looks for gpu_busy_percent in /sys/class/drm/card*/device/
+ * Looks for gpu_busy_percent in /sys/class/drm/card[N]/device/
  */
 function getAmdGpuUsage(): number | null {
   try {

@@ -8,6 +8,7 @@ import Link from 'next/link';
 import WeatherWidget from './WeatherWidget';
 import NewsArticleWidget from './NewsArticleWidget';
 import SettingsButtonMobile from '@/components/Settings/SettingsButtonMobile';
+import GPUIndicator from '@/components/GPUIndicator';
 import {
   getShowNewsWidget,
   getShowWeatherWidget,
@@ -43,7 +44,8 @@ const EmptyChat = () => {
 
   return (
     <div className="relative">
-      <div className="absolute w-full flex flex-row items-center justify-end mr-5 mt-5">
+      <div className="absolute w-full flex flex-row items-center justify-end gap-2 mr-5 mt-5">
+        <GPUIndicator />
         <SettingsButtonMobile />
       </div>
       <div className="flex flex-col items-center justify-center min-h-screen max-w-screen-sm mx-auto p-2 space-y-4">

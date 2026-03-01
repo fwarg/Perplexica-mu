@@ -5,9 +5,9 @@ services:
     ports:
       - '8020:8020'
     environment:
-      - RLM_MODEL=${RLM_MODEL:-}
-      - OPENAI_BASE_URL=${OPENAI_BASE_URL:-}
-      - OPENAI_API_KEY=${OPENAI_API_KEY:-local}
+      - RLM_MODEL=user.Qwen3-30B-A3B-Instruct-2507-GGUF
+      - OPENAI_BASE_URL=http://172.17.0.1:8090/api/v1
+      - OPENAI_API_KEY=local
     restart: unless-stopped
     profiles:
       - rlm

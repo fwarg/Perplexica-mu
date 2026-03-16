@@ -86,6 +86,7 @@ const webSearchAction: ResearchAction<typeof actionSchema> = {
     config.classification.classification.skipSearch === false,
   execute: async (input, additionalConfig) => {
     input.queries = input.queries.slice(0, 3);
+    const resultsPerQuery = additionalConfig.mode === 'speed' ? 5 : additionalConfig.mode === 'balanced' ? 8 : 10;
 
     const researchBlock = additionalConfig.session.getBlock(
       additionalConfig.researchBlockId,
@@ -115,7 +116,7 @@ const webSearchAction: ResearchAction<typeof actionSchema> = {
     const search = async (q: string) => {
       const res = await searchSearxng(q);
 
-      const resultChunks: Chunk[] = res.results.map((r) => ({
+      const resultChunks: Chunk[] = res.results.slice(0, resultsPerQuery).map((r) => ({
         content: r.content || r.title,
         metadata: {
           title: r.title,

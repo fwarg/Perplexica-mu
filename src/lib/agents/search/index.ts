@@ -130,6 +130,15 @@ class SearchAgent {
       console.log(`[Search] rlm: ${Date.now() - t2}ms`);
       if (condensed) {
         finalContext = `<rlm_synthesis>${condensed}</rlm_synthesis>`;
+      } else {
+        // RLM failed — cap raw context to avoid drowning the writer
+        const RAW_CONTEXT_CHAR_LIMIT = 80_000;
+        if (finalContext.length > RAW_CONTEXT_CHAR_LIMIT) {
+          const truncated = finalContext.slice(0, RAW_CONTEXT_CHAR_LIMIT);
+          const lastClose = truncated.lastIndexOf('</result>');
+          finalContext = lastClose !== -1 ? truncated.slice(0, lastClose + '</result>'.length) : truncated;
+          console.log(`[Search] raw context truncated to ${finalContext.length} chars`);
+        }
       }
     }
 

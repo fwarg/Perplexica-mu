@@ -67,6 +67,7 @@ export type AdditionalConfig = {
   llm: BaseLLM<any>;
   embedding: BaseEmbedding<any>;
   session: SessionManager;
+  mode: SearchAgentConfig['mode'];
   userId?: string | null;  // User ID for file access verification
 };
 

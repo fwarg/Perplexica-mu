@@ -4,7 +4,7 @@ export async function summarizeWithRLM(
   serviceURL: string,
 ): Promise<string | null> {
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 60_000);
+  const timeout = setTimeout(() => controller.abort(), 120_000);
 
   try {
     const response = await fetch(`${serviceURL}/summarize`, {

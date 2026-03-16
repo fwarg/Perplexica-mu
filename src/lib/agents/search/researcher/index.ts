@@ -169,6 +169,7 @@ class Researcher {
         llm: input.config.llm,
         embedding: input.config.embedding,
         session: session,
+        mode: input.config.mode,
         researchBlockId: researchBlockId,
         fileIds: input.config.fileIds,
         userId: input.config.userId,

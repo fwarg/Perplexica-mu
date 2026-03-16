@@ -57,6 +57,7 @@ class Researcher {
     ];
 
     for (let i = 0; i < maxIteration; i++) {
+      const tIter = Date.now();
       const researcherPrompt = getResearcherPrompt(
         availableActionsDescription,
         input.config.mode,
@@ -148,6 +149,8 @@ class Researcher {
         }
       }
 
+      console.log(`[Search] researcher iter ${i}: ${Date.now() - tIter}ms`);
+
       if (finalToolCalls.length === 0) {
         break;
       }
@@ -208,6 +211,7 @@ class Researcher {
       })
       .filter((r) => r !== undefined);
 
+    console.log(`[Search] researcher dedup: ${filteredSearchResults.length} sources`);
     session.emitBlock({
       id: crypto.randomUUID(),
       type: 'source',

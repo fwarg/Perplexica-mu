@@ -862,17 +862,17 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
       if (done) break;
 
       partialChunk += decoder.decode(value, { stream: true });
+      const lines = partialChunk.split('\n');
+      partialChunk = lines.pop() ?? '';
 
-      try {
-        const messages = partialChunk.split('\n');
-        for (const msg of messages) {
-          if (!msg.trim()) continue;
-          const json = JSON.parse(msg);
+      for (const line of lines) {
+        if (!line.trim()) continue;
+        try {
+          const json = JSON.parse(line);
           messageHandler(json);
+        } catch (e) {
+          console.warn('Failed to parse stream message:', line);
         }
-        partialChunk = '';
-      } catch (error) {
-        console.warn('Incomplete JSON, waiting for next chunk...');
       }
     }
   };

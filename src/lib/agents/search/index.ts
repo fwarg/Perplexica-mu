@@ -53,12 +53,14 @@ class SearchAgent {
         .execute();
     }
 
+    const t0 = Date.now();
     const classification = await classify({
       chatHistory: input.chatHistory,
       enabledSources: input.config.sources,
       query: input.followUp,
       llm: input.config.llm,
     });
+    console.log(`[Search] classify: ${Date.now() - t0}ms`);
 
     const widgetPromise = WidgetExecutor.executeAll({
       classification,
@@ -83,11 +85,15 @@ class SearchAgent {
 
     if (!classification.classification.skipSearch) {
       const researcher = new Researcher();
+      const t1 = Date.now();
       searchPromise = researcher.research(session, {
         chatHistory: input.chatHistory,
         followUp: input.followUp,
         classification: classification,
         config: input.config,
+      }).then((result) => {
+        console.log(`[Search] research: ${Date.now() - t1}ms, sources: ${result.searchFindings.length}`);
+        return result;
       });
     }
 
@@ -112,6 +118,7 @@ class SearchAgent {
     const rlmServiceURL = configManager.getConfig('system.rlmServiceURL', '');
 
     if (rlmEnabled && rlmServiceURL && searchResults?.searchFindings.length) {
+      const t2 = Date.now();
       const condensed = await summarizeWithRLM(
         searchResults.searchFindings.map((f) => ({
           title: f.metadata.title,
@@ -120,6 +127,7 @@ class SearchAgent {
         input.followUp,
         rlmServiceURL,
       );
+      console.log(`[Search] rlm: ${Date.now() - t2}ms`);
       if (condensed) {
         finalContext = `<rlm_synthesis>${condensed}</rlm_synthesis>`;
       }
@@ -138,6 +146,8 @@ class SearchAgent {
       input.config.systemInstructions,
       input.config.mode,
     );
+    const t3 = Date.now();
+    console.log(`[Search] writer: start`);
     const answerStream = input.config.llm.streamText({
       messages: [
         {
@@ -184,6 +194,7 @@ class SearchAgent {
       }
     }
 
+    console.log(`[Search] writer: ${Date.now() - t3}ms`);
     session.emit('end', {});
 
     await db

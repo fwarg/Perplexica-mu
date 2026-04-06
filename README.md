@@ -1,5 +1,5 @@
 
-<span style="color: red;">Archiving this branch since Perplexica (now Vane) is adding multiuser, and also I've abandoned this fork to work on a similar project of my own: [Queriocity](https://github.com/fwarg/queriocity).</span>
+**Archiving this branch since Perplexica (now Vane) is adding multiuser, and also I've abandoned this fork to work on a similar project of my own: [Queriocity](https://github.com/fwarg/queriocity).**
 
 # Perplexica-mu
 
